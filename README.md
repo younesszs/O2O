@@ -1,29 +1,45 @@
-# Online $\leftright$ Offline Spillover
+# Online -- Offline Spillover
 
-O2O is a Python package that estimates the magnitude and direction of spillover effects between online and offline activities. One key application is analyzing how social media behavior, such as threatening or hostile comments made by gang members on platforms like Facebook, may contribute to offline incidents like shootings. By modeling these interactions using a bivariate Hawkes process. 
-
-
-## Instalation
-Instal the package using pip install O2O
-
-API documentation is provided in O2O_API_documentation.pdf
+O2O is a Python package that quantifies mutual spillover between online and offline events, showing how activity in one arena can influence and be influenced by the other. Generating realistic synthetic data, it lets you prototype analyses before working with sensitive records. Powered by a bivariate Hawkes process, O2O delivers clear estimates of both the strength and direction of these reciprocal effects, whether you are examining social-media dynamics alongside real-world incidents or any other paired event streams.
 
 
+<!--## Instalation
+
+Install the package with:
+
+pip install O2O-->
+
+
+## Dependencies
+
+To use O2O, make sure the following Python libraries are installed:
+
+- pip install numpy pandas matplotlib stan nest_asyncio.
+	
+- The package was developed and tested with Python 3.9.5.
+
+- API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
 ## Usage
 
-After installation, the user specifies:
+You can use O2O in two ways:
+
+- From a Jupyter Notebook (`demo.ipynb`)
+- From the terminal using the Python script (`demo.py`)
+
+When using `demo.py`, you will be prompted to specify:
 
 - The number of users
-- The time period of interest
+- The time window of interest (in days)
 
-The package then performs the following:
+The package performs the following:
 
-### 1. **Generate synthetic timestamp data**
+
+### 1. **Generates synthetic timestamp data**
 
 - Simulates timestamps for both online and offline user events.
 
-### 2. **Estimate spillover effects**
+### 2. **Estimates spillover effects**
 
 - Calculates the influence of one event type (online/offline) on the other.
 - Provides:
@@ -31,30 +47,38 @@ The package then performs the following:
   - Decay rates and their 95% confidence intervals.
   - The percentage of events caused by the other type.
 
-### 3. **Summarize user activity**
+### 3. **Summarizes user activity**
 
 - Computes the total number of online and offline events per user.
 - Plots the coupled online–offline intensity over time for each user.
 
-# Model
+## Model
 
-The model in a bivariate Hawkes process that can be described by the conditional intensities
+The model is a bivariate Hawkes process that can be described by the conditional intensities
 
 $$
-\lambda_1^{\text{user}} = \mu_1^{\text{user}} + \sum\limits_{k:t>t_k^1}^{N_\text{user}^1} \alpha_{11}\beta_{11} e^{-\beta_{11}(t-t_k^1)} + \sum\limits_{k:t>t_k^2}^{N^2_\text{user}} \alpha_{12}\beta_{12} e^{-\beta_{12}(t-t_k^2)}
+\lambda_1^{\text{user}} = \mu_1^{\text{user}} + \sum\limits_{k:t>t_k^1}^{N_\text{user}^1} \alpha_{11}\gamma_{11} e^{-\gamma_{11}(t-t_k^1)} + \sum\limits_{k:t>t_k^2}^{N^2_\text{user}} \alpha_{12}\gamma_{12} e^{-\gamma_{12}(t-t_k^2)}
 $$
 $$
-\lambda_2^{\text{user}} = \mu_2^{\text{user}} + \sum\limits_{k:t>t_k^1}^{N^1_\text{user}} \alpha_{21}\beta_{21} e^{-\beta_{21}(t-t_k^1)} + \sum\limits_{k:t>t_k^2}^{N^2_\text{user}} \alpha_{22}\beta_{22} e^{-\beta_{22}(t-t_k^2)},
+\lambda_2^{\text{user}} = \mu_2^{\text{user}} + \sum\limits_{k:t>t_k^1}^{N^1_\text{user}} \alpha_{21}\gamma_{21} e^{-\gamma_{21}(t-t_k^1)} + \sum\limits_{k:t>t_k^2}^{N^2_\text{user}} \alpha_{22}\gamma_{22} e^{-\gamma_{22}(t-t_k^2)},
 $$
 
+where:
 
-Here online activity e.g., negative comments of threats on social media are indexed by 1 and offline activities e.g., shootings are marked by 2. The parameter $\alpha$ gives us the spillover effect, for example $\alplha_{12}$ accounts for the expected number of offline activities caused by an initial social media negative post, whereas $\beta_{ij}$ determines the decay rate of cross-excitation from node $j$ to node $i$. Lastly, $\mu_{\text{user}} = [mu_1^{\text{user}}, mu_2^{\text{user}}]$ are the baseline rates for online and offline activities, respectively. 
+* Online activity (e.g., hostile posts) is indexed by 1.
+* Offline activity (e.g., shootings) is indexed by 2.
+* $\alpha_{ij}$: expected number of type-i events triggered by one type-j event.
+* $\gamma_{ij}$: decay rate of influence from type $j$ to type $i$
+* $\mu^{\text{user}} = [\mu_1, \mu_2]$: baseline intensities per user
 
-### Aknowledgement
 
-This package is based on [1]
+<!--Here, online activity (e.g., negative or threatening comments on social media) is indexed by 1, while offline activity (e.g., shootings) is indexed by 2. The parameter $\alpha$ captures the spillover effects between event types; for example, $\alpha_{12}$ represents the expected number of offline events triggered by a single online event. The parameter $\gamma_{ij}$ controls the decay rate of cross-excitation from events of type $j$ to type $i$, indicating how quickly the influence of past events fades over time. Finally, $\mu_{\text{user}} = [\mu_1^{\text{user}}, \mu_2^{\text{user}}]$ denotes the baseline intensities for online and offline activities for each user, respectively.-->
 
-[1]: John Leverso, Youness Diouane, George Mohler, Measuring Online–Offline Spillover of Gang Violence Using Bivariate Hawkes Processes.
+## Aknowledgement
+
+This package is based on:
+
+John Leverso, Youness Diouane, George Mohler, "Measuring Online–Offline Spillover of Gang Violence Using Bivariate Hawkes Processes", 
 Journal of quantitative criminology, 2025.
 
 

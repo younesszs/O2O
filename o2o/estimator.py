@@ -10,9 +10,6 @@ try:
 except ImportError:
     pass
 
-
-
-
 class ParameterEstimator:
     """
     This class estimates the model parameters and outputs tables of the spillover estimation, decay rate estimation,
@@ -36,8 +33,6 @@ class ParameterEstimator:
 
     #Define the first method in this class: The parameter estimation using Stan
     def fit_model(self, data_online, data_offline, M, T, save_fit = False):
-        np.random.seed(42)
-
         """
         Estimate parameters using Stan.
 
@@ -51,7 +46,7 @@ class ParameterEstimator:
         Returns:
             fit: Posterior samples
         """
-
+        np.random.seed(42)
 
         na_online = [len(i) for i in self.data_online ] #online sizes
         nb_offline = [len(i) for i in self.data_offline ] #offline sizes
@@ -165,28 +160,28 @@ class ParameterEstimator:
         #optinal saving for the fit file
         if save_fit:
             with open('fit.pkl', 'wb') as file:
-                pickle.dump(file)
+                pickle.dump(fit, file)
         self.fit = fit
         return fit
 
-    #Output alpha (spillover effect) and beta (decay rate) and their 95% CI
-    def spillover_and_decays_values_and_CI(self, save_alpha = False, save_beta = False):
-
+    def spillover_and_decays_values_and_CI(self, save_alpha = False, save_gamma = False):
         """
-        This method constructs the tables of the O2O spillover as well as the O2O decay rate and their conrresponding 95% CI.
-        In our convention, the marked 0 events correspond to online, and the marked 1 events correspond to offline.
-            - alpha_{00}: 0 --> 0 online to online spillover
-            - alpha_{11}: 1 --> 1 offline to offline spillover
-            - alpha_{01}: 1 --> 0 offline to online spillover
-            - alpha_{10}: 0 --> 1 online to offline spillover
+    	This method constructs the tables of the O2O spillover as well as the O2O decay rate and their conrresponding 95% CI.
+    	In our convention, the marked 0 events correspond to online, and the marked 1 events correspond to offline.
+        - alpha_{00}: 0 --> 0 online to online spillover
+        - alpha_{11}: 1 --> 1 offline to offline spillover
+        - alpha_{01}: 1 --> 0 offline to online spillover
+        - alpha_{10}: 0 --> 1 online to offline spillover
 
-            - beta_{00}: 0 --> 0 online to online decay rate
-            - beta_{11}: 1 --> 1 offline to offline decay rate
-            - beta_{01}: 1 --> 0 offline to online decay rate
-            - beta_{10}: 0 --> 1 online to offline decay rate
+        - gamma_{00}: 0 --> 0 online to online decay rate
+        - gamma_{11}: 1 --> 1 offline to offline decay rate
+        - gamma_{01}: 1 --> 0 offline to online decay rate
+        - gamma_{10}: 0 --> 1 online to offline decay rate
 
-        Args:
-            - save_alpha, save_beta: are declared when wanting to save the alpha and beta tables as csv files
+	Args:
+            - save_alpha, save_beta: are declared when wanting to save the alpha and gamma tables as csv files
+        Returns: 
+            - pd.DataFrame of alpha and gamma and their 95% CI
         """
         fit = self.fit
 
@@ -197,10 +192,10 @@ class ParameterEstimator:
         alpha_off_to_on = '{:.3f}'.format(np.mean(fit['alpha'][0,1], axis=0))
 
         #Decay rate
-        beta_on_to_on =  '{:.3f}'.format(np.mean(fit['gamma'][0,0], axis=0))
-        beta_off_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,1], axis=0))
-        beta_on_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,0], axis=0))
-        beta_off_to_on = '{:.3f}'.format(np.mean(fit['gamma'][0,1], axis=0))
+        gamma_on_to_on =  '{:.3f}'.format(np.mean(fit['gamma'][0,0], axis=0))
+        gamma_off_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,1], axis=0))
+        gamma_on_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,0], axis=0))
+        gamma_off_to_on = '{:.3f}'.format(np.mean(fit['gamma'][0,1], axis=0))
 
         #Spillover 95% CI
         alpha_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['alpha'][0,0], 5, axis=0))
@@ -212,13 +207,13 @@ class ParameterEstimator:
         alpha_off_to_on_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][0,1], 5, axis=0))
                              , '{:.3f}'.format(np.percentile(fit['alpha'][0,1], 95, axis=0))]
         #Decay rate 95% CI
-        beta_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,0], 5, axis=0))
+        gamma_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,0], 5, axis=0))
                              , '{:.3f}'.format(np.percentile(fit['gamma'][0,0], 95, axis=0))]
-        beta_off_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,1], 5, axis=0))
+        gamma_off_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,1], 5, axis=0))
                              , '{:.3f}'.format(np.percentile(fit['gamma'][1,1], 95, axis=0))]
-        beta_on_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,0], 5, axis=0))
+        gamma_on_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,0], 5, axis=0))
                              , '{:.3f}'.format(np.percentile(fit['gamma'][1,0], 95, axis=0))]
-        beta_off_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,1], 5, axis=0))
+        gamma_off_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,1], 5, axis=0))
                              , '{:.3f}'.format(np.percentile(fit['gamma'][0,1], 95, axis=0))]
         #Table of spillover effect and its 95% CI
         alpha_data = [
@@ -230,31 +225,30 @@ class ParameterEstimator:
         alpha_df = pd.DataFrame(alpha_data, columns=['Effect', 'Value', '95% CI'])
 
         #Table of decay rate and its 95% CI
-        beta_data = [
-            ['Online to Online Decay', beta_on_to_on, beta_on_to_on_CI],
-            ['Offline to Offline Decay', beta_off_to_off, beta_off_to_off_CI],
-            ['Online to Offline Decay', beta_on_to_off, beta_on_to_off_CI],
-            ['Offline to Online Decay', beta_off_to_on, beta_off_to_on_CI]
+        gamma_data = [
+            ['Online to Online Decay', gamma_on_to_on, gamma_on_to_on_CI],
+            ['Offline to Offline Decay', gamma_off_to_off, gamma_off_to_off_CI],
+            ['Online to Offline Decay', gamma_on_to_off, gamma_on_to_off_CI],
+            ['Offline to Online Decay', gamma_off_to_on, gamma_off_to_on_CI]
         ]
-        beta_df = pd.DataFrame(beta_data, columns=['Effect', 'Value', '95% CI'])
+        gamma_df = pd.DataFrame(gamma_data, columns=['Effect', 'Value', '95% CI'])
 
         if save_alpha:
             alpha_df.to_csv('alpha_estimates.csv', index = False)
-        if save_beta:
-            beta_df.to_csv('beta_estimates.csv', index = False)
+        if save_gamma:
+            gamma_df.to_csv('gamma_estimates.csv', index = False)
 
-        return pd.DataFrame(alpha_df), pd.DataFrame(beta_df)
+        return pd.DataFrame(alpha_df), pd.DataFrame(gamma_df)
 
 
-    #Output baseline intensities for each user and their corresponding 95% CI
     def base_and_CI(self, save_mu = False):
         """
-        Returns a table of baseline intensities (mu) for each user and their 95% confidence intervals.
-        Args:
-            save_mu (bool): Save the output table to 'estimated_mu.csv'
+        Online and offline baseline intensities and their 95% for each user    
+            Args:
+                save_mu (bool): Save the output table to 'estimated_mu.csv'
 
-        Returns:
-            pd.DataFrame
+            Returns:
+                pd.DataFrame of mu and 95%CI for each user online and offline
         """
         fit = self.fit
 
@@ -353,8 +347,8 @@ class ParameterEstimator:
         online_to_offline_aggr = '{:.3f}'.format(100*(1-(np.sum(online0) / np.sum(onlinetot))))
 
         percent_table = {'User': [*labels, 'Aggregate'],
-        '% Online $\rightarrow$ Offline' : [*[online_to_offline_percent(i) for i in labels], online_to_offline_aggr],
-        '% Offline $\rightarrow$ Online' : [*[offline_to_online_percent(i) for i in labels], offline_to_online_aggr]}
+        '% Online  → Offline' : [*[online_to_offline_percent(i) for i in labels], online_to_offline_aggr],
+        '% Offline → Online' : [*[offline_to_online_percent(i) for i in labels], offline_to_online_aggr]}
         df = pd.DataFrame(percent_table)
         if save_percentages:
             df.to_csv('estimated_percentages_effects.csv', index = False)

@@ -45,7 +45,6 @@ class BivariateHawkesProcessSimulator:
             self.mu = np.array(np)
 
     def simulate(self, save_online_data = False, save_offline_data = False):
-
         """
         Run the simulation.
 
@@ -95,7 +94,7 @@ class BivariateHawkesProcessSimulator:
                     g = np.random.poisson(self.alpha[0,k])
                     for j in range(g):
                         tnew = times_outer[m][i] + np.random.exponential(1. / self.gamma[0,k])
-                        if tnew < T:
+                        if tnew < self.T:
                             times_outer[m].append(tnew)
                             marks_outer[m].append(0)
                             N_list[m]+=1
@@ -103,7 +102,7 @@ class BivariateHawkesProcessSimulator:
                     g = np.random.poisson(self.alpha[1,k])
                     for j in range(g):
                         tnew = times_outer[m][i] + np.random.exponential(1. / self.gamma[1,k])
-                        if tnew < T:
+                        if tnew < self.T:
                             times_outer[m].append(tnew)
                             marks_outer[m].append(1)
                             N_list[m]+=1
