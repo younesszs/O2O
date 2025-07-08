@@ -42,9 +42,9 @@ The package performs the following:
 ### 2. **Estimates spillover effects**
 
 - Calculates the influence of one event type (online/offline) on the other and its corresponding 95% confidence interval.
-- 95% confidence intervals for spillover effect estimates.
 - Decay rates and their 95% confidence intervals.
 - The percentage of events caused by the other type.
+- Estimates for the baseline intensities online and offline for each user as well as their corresponding 95% confidence interval.
 
 ### 3. **Summarizes user activity**
 
