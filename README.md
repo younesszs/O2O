@@ -66,7 +66,7 @@ where:
 
 * Online activity (e.g., hostile posts) is indexed by 1.
 * Offline activity (e.g., shootings) is indexed by 2.
-* $\alpha_{ij}$: expected number of type-i events triggered by one type-j event.
+* $\alpha_{ij}$: expected number of type-i events triggered by an initial type-j event.
 * $\gamma_{ij}$: decay rate of influence from type $j$ to type $i$
 * $\mu^{\text{user}} = [\mu_1, \mu_2]$: baseline intensities per user
 
