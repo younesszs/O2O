@@ -49,8 +49,8 @@ class BivariateHawkesProcessSimulator:
         Run the simulation.
 
         Args:
-            pickle_online (bool): Save online data to pickle if True.
-            pickle_offline (bool): Save offline data to pickle if True.
+            save_online_data (bool): Save online data to pickle if True.
+            save_offline_data (bool): Save offline data to pickle if True.
             online_path (str): File path for online data pickle.
             offline_path (str): File path for offline data pickle.
 
