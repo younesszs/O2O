@@ -14,7 +14,7 @@ pip install O2O-->
 
 To use O2O, make sure the following Python libraries are installed:
 
-- pip install numpy pandas matplotlib stan nest_asyncio.
+- pip install numpy pandas matplotlib pystan nest_asyncio.
 	
 - The package was developed and tested with Python 3.9.5.
 
