@@ -24,12 +24,30 @@ class ParameterEstimator:
             M (int): Number of users
             T (int): Total observation time
         """
-
-        self.data_online = data_online
-        self.data_offline = data_offline
+        
+        self.data_online = self._ensure_list_of_arrays(data_online)
+        self.data_offline = self._ensure_list_of_arrays(data_offline)
         self.M = M
         self.T = T
         self.fit = None  #stores the posterior samples after fitting
+
+        if len(self.data_online) != M or len(self.data_offline) != M:
+            raise ValueError("Length of online and offline data should match M")
+
+    @staticmethod
+    def _ensure_list_of_arrays(data):
+        """
+        This static function ensures that the data is a list of numpy arrays if not already
+        """
+        if isinstance(data, np.ndarray):
+            if data.ndim == 1:
+                #If a single array, wrap in a list
+                return [np.array(data)]
+            elif data.ndim == 2:
+                return [np.array(row) for row in data]
+        elif isinstance(data, list):
+            return [np.array(row) for row in data]
+
 
     #Define the first method in this class: The parameter estimation using Stan
     def fit_model(self, data_online, data_offline, M, T, save_fit = False):

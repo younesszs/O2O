@@ -16,7 +16,17 @@ To use O2O, make sure the following Python libraries are installed:
 
 - pip install numpy pandas matplotlib stan nest_asyncio.
 	
-- The package was developed and tested with Python 3.9.5.
+- The package was developed and tested with Python 3.9.5. I highly recommend installing Python and the required dependencies in a virtual environment such as Conda. On Unix-based systems (Linux, macOS), Python is often tied to critical system functions, so modifying the system-wide Python installation can be risky. To install Conda:
+
+- Visit the [Miniconda download page](https://docs.conda.io/en/latest/miniconda.html) and download the appropriate installer for your operating system.
+- Follow the installation instructions.
+- Once installed, create and activate a dedicated environment
+
+```bash
+conda create -n o2o_env python=3.9
+conda activate o2o_env
+```
+Once your environment is activated, install the required dependencies.
 
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
@@ -71,7 +81,6 @@ where:
 * $\mu^{\text{user}} = [\mu_1, \mu_2]$: baseline intensities per user
 
 
-<!--Here, online activity (e.g., negative or threatening comments on social media) is indexed by 1, while offline activity (e.g., shootings) is indexed by 2. The parameter $\alpha$ captures the spillover effects between event types; for example, $\alpha_{12}$ represents the expected number of offline events triggered by a single online event. The parameter $\gamma_{ij}$ controls the decay rate of cross-excitation from events of type $j$ to type $i$, indicating how quickly the influence of past events fades over time. Finally, $\mu_{\text{user}} = [\mu_1^{\text{user}}, \mu_2^{\text{user}}]$ denotes the baseline intensities for online and offline activities for each user, respectively.-->
 
 ## Aknowledgement
 

@@ -21,7 +21,7 @@ class BivariateHawkesProcessSimulator:
         self.T = T
         self.M = M
 
-        if gamma == None:
+        if gamma is  None:
             # Initialize decay rates gamma for each mark-to-mark excitation (if the user specifies it  will
             #overwrite the values wa use here)
             # gamma[i,j] is the decay rate of events of type j exciting type i
@@ -29,28 +29,28 @@ class BivariateHawkesProcessSimulator:
         else:
             self.gamma = np.array(gamma)
 
-        if alpha == None:
+        if alpha is  None:
             # Initialize the reproduction matrix alpha (if the user specifies it  will overwrite the values wa use here)
             # alpha[i,j] is the expected number of offspring of type i triggered from a parent of type
             self.alpha = np.array([[.6, .1], [.2, .8]])
         else:
             self.alpha = np.array(alpha)
 
-        if mu == None:
+        if mu is  None:
             #Initialize the baseline intensity mu (if the user specifies it  will overwrite the values wa use here)
             self.mu = np.zeros([M, 2])
             self.mu[:, 0] = .1 #Offline initial rate
             self.mu[:, 1] = .3 #Online initial rate
         else:
-            self.mu = np.array(np)
+            self.mu = np.array(mu)
 
     def simulate(self, save_online_data = False, save_offline_data = False):
         """
         Run the simulation.
 
         Args:
-            pickle_online (bool): Save online data to pickle if True.
-            pickle_offline (bool): Save offline data to pickle if True.
+            save_online_data (bool): Save online data to pickle if True.
+            save_offline_data (bool): Save offline data to pickle if True.
             online_path (str): File path for online data pickle.
             offline_path (str): File path for offline data pickle.
 
@@ -109,7 +109,10 @@ class BivariateHawkesProcessSimulator:
 
         #Sort each sequence's events by time, keeping marks in sync
         for m in range(self.M):
-            times_outer[m], marks_outer[m] = (list(t) for t in zip(*sorted(zip(times_outer[m], marks_outer[m]))))
+            if len(times_outer[m]) > 0:
+                times_outer[m], marks_outer[m] = (list(t) for t in zip(*sorted(zip(times_outer[m], marks_outer[m]))))
+            else:
+                times_outer[m], marks_outer[m] = [], []
 
         #Separate times by mark
         offline_data = [] #times for mark 0
