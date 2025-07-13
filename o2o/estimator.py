@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
 import pickle
-import stan
+#import stan
+
+try:
+    import stan
+except ImportError:
+    import pystan as stan
 
 # Allow running Stan in notebooks without loop errors
 try:
