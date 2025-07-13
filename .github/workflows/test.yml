@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -24,5 +23,7 @@ jobs:
           pip install numpy pandas matplotlib pystan nest_asyncio pytest
 
       - name: Run tests
-        run: pytest
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest
 
