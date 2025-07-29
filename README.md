@@ -6,12 +6,6 @@ O2O is a Python package that quantifies mutual spillover between online and offl
 
 ## Installation
 
-To use O2O, make sure the following Python libraries are installed:
-
-```bash
-pip install numpy pandas matplotlib pystan nest_asyncio
-```
-	
 - The package was developed and tested with Python 3.9.5. I highly recommend installing Python and the required dependencies in a virtual environment such as Conda. On Unix-based systems (Linux, macOS), Python is often tied to critical system functions, so modifying the system-wide Python installation can be risky. To install Conda:
 
 - Visit the [Miniconda download page](https://docs.conda.io/en/latest/miniconda.html) and download the appropriate installer for your operating system.
@@ -22,8 +16,11 @@ pip install numpy pandas matplotlib pystan nest_asyncio
 conda create -n o2o_env python=3.9
 conda activate o2o_env
 ```
-Once your environment is activated, install the required dependencies.
+Once your environment is activated, install the required dependencies:
 
+```bash
+pip install numpy pandas matplotlib pystan nest_asyncio
+```
 - Once you install all the dependencies, you can install the package using 
 
 ```bash
