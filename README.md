@@ -33,7 +33,7 @@ Once your environment is activated, install the required dependencies.
 - Once you install all the dependencies, you can install the package using 
 
 ```bash
-pip install O2O
+pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
