@@ -16,7 +16,7 @@ O2O is a Python package that quantifies mutual spillover between online and offl
 conda create -n o2o_env python=3.9
 conda activate o2o_env
 ```
-Once your environment is activated, install the required dependencies:
+- Once your environment is activated, install the required dependencies:
 
 ```bash
 pip install numpy pandas matplotlib pystan nest_asyncio
