@@ -3,18 +3,12 @@
 O2O is a Python package that quantifies mutual spillover between online and offline events, showing how activity in one arena can influence and be influenced by the other. Generating realistic synthetic data, it lets you prototype analyses before working with sensitive records. Using a bivariate Hawkes process, O2O delivers clear estimates of both the strength and direction of these reciprocal effects, whether you are examining social-media dynamics alongside real-world incidents or any other paired event streams.
 
 
-<!--## Instalation
 
-Install the package with:
-
-pip install O2O-->
-
-
-## Dependencies
+## Installation
 
 To use O2O, make sure the following Python libraries are installed:
 
-```bach
+```bash
 pip install numpy pandas matplotlib pystan nest_asyncio
 ```
 	
@@ -24,7 +18,7 @@ pip install numpy pandas matplotlib pystan nest_asyncio
 - Follow the installation instructions.
 - Once installed, create and activate a dedicated environment
 
-```bach
+```bash
 conda create -n o2o_env python=3.9
 conda activate o2o_env
 ```
@@ -32,7 +26,7 @@ Once your environment is activated, install the required dependencies.
 
 - Once you install all the dependencies, you can install the package using 
 
-```bach
+```bash
 pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
@@ -41,7 +35,7 @@ pip install o2o-process
 
 After installing the package, you can run its demo using the command:
 
-```bach
+```bash
 o2o-demo
 ```
 where you will be prompted to specify:
@@ -49,9 +43,9 @@ where you will be prompted to specify:
 - The number of users
 - The time window of interest (in days)
 
-- You can also run the demo from a Jupyter Notebook (`demo.ipynb`). To access it, clone the GitHub repository:
+You can also run the demo from a Jupyter Notebook (`demo.ipynb`). To access it, clone the GitHub repository:
 
-```bach
+```bash
 git clone https://github.com/younesszs/o2o-process.git
 ```
 
