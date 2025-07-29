@@ -24,7 +24,7 @@ pip install numpy pandas matplotlib pystan nest_asyncio
 - Follow the installation instructions.
 - Once installed, create and activate a dedicated environment
 
-```bash
+```bach
 conda create -n o2o_env python=3.9
 conda activate o2o_env
 ```
@@ -32,22 +32,28 @@ Once your environment is activated, install the required dependencies.
 
 - Once you install all the dependencies, you can install the package using 
 
-```bash
+```bach
 pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
 ## Usage
 
-You can use O2O in two ways:
+After installing the package, you can run its demo using the command:
 
-- From a Jupyter Notebook (`demo.ipynb`)
-- From the terminal using the Python script (`demo.py`)
-
-When using `demo.py`, you will be prompted to specify:
+```bach
+o2o-demo
+```
+where you will be prompted to specify:
 
 - The number of users
 - The time window of interest (in days)
+
+- You can also run the demo from a Jupyter Notebook (`demo.ipynb`). To access it, clone the GitHub repository:
+
+```bach
+git clone https://github.com/younesszs/o2o-process.git
+```
 
 The package performs the following:
 
@@ -89,7 +95,7 @@ where:
 
 
 
-## Aknowledgement
+## Acknowledgement
 
 This package is based on:
 
