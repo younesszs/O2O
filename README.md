@@ -47,7 +47,6 @@ sudo apt install g++-11
 Then set the compiler and clear Stan's cache
 
 ```bash
-conda activate o2o_env
 export CXX=/usr/bin/g++-11
 rm -rf ~/.cache/httpstan
 ```
@@ -123,7 +122,7 @@ Feel free to open an issue, submit a pull request, or suggest enhancements.
 
 Thanks for using O2O!
 
-Youness
+
 
 
 
