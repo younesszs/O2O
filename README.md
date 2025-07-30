@@ -28,6 +28,30 @@ pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
+## Linux Note: Fix for Compiler and Stan Errors
+If you use Linux you might encounter an error like 
+```
+libstdc++.so.6: version `GLIBCXX_3.4.32' not found
+```
+Or:
+```
+ValueError: TAPE_ERROR: The JSON document has an improper structure
+```
+This means that you need a newer version of the C++ compiler. To fix this, run the following:
+
+```bash
+sudo apt update
+sudo apt install g++-11
+```
+
+Then set the compiler and clear Stan's cache
+
+```bash
+conda activate o2o_env
+export CXX=/usr/bin/g++-11
+rm -rf ~/.cache/httpstan
+```
+
 ## Usage
 
 After installing the package, you can run its demo using the command:
@@ -43,7 +67,7 @@ where you will be prompted to specify:
 You can also run the demo from a Jupyter Notebook (`demo.ipynb`). To access it, clone the GitHub repository:
 
 ```bash
-git clone https://github.com/younesszs/o2o-process.git
+git clone https://github.com/younesszs/O2O.git
 ```
 
 The package performs the following:
@@ -93,6 +117,13 @@ This package is based on:
 John Leverso, Youness Diouane, George Mohler, "Measuring Online–Offline Spillover of Gang Violence Using Bivariate Hawkes Processes", 
 Journal of quantitative criminology, 2025.
 
+## Feedback and contributions
+I am always open to improving this software! 
+Feel free to open an issue, submit a pull request, or suggest enhancements.
+
+Thanks for using O2O!
+
+Youness
 
 
 
