@@ -32,7 +32,10 @@ jobs:
 
       - name: Install runtime dependencies
         run: |
-          pip install pandas matplotlib pystan nest_asyncio pytest
+         pip install pandas matplotlib pystan nest_asyncio pytest cmdstanpy
+
+      - name: Install CmdStan binaries
+        run: python -m cmdstanpy.install_cmdstan
 
       # Install your package in editable mode so `import o2o` works
       - name: Install package itself
