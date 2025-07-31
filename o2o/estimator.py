@@ -3,10 +3,12 @@ import pandas as pd
 import pickle
 #import stan
 
-try:
-    import stan
-except ImportError:
-    import pystan as stan
+#try:
+#    import stan
+#except ImportError:
+#    import pystan as stan
+
+from cmdstanpy import CmdStanModel
 
 # Allow running Stan in notebooks without loop errors
 try:
@@ -84,113 +86,42 @@ class ParameterEstimator:
         for i in data_offline:
             offline_padded_data.append(np.pad(i, (0, max(nb_offline)- len(i)), constant_values = -1))
 
-        #Stan code
-        model_code = """
-        data {
-          int<lower=1> M;                  // number of gangs
-          array[M] int<lower=1> Na;        // list of lenght for each on_data
-          array[M] int<lower=1> Nb;        // list of lenght for each off_data
-          int<lower=1> maxNa;              // maximum over Na
-          int<lower=1> maxNb;              // maximum over Nb
-          array[M] vector[maxNa] ta;
-          array[M] vector[maxNb] tb;
-          int<lower=0> T;
-        }
-        parameters {
-          matrix<lower=0>[M,2] mu;                     // baseline
-          matrix<lower=0>[2,2] gamma;                  // decay
-          matrix<lower=0, upper=1>[2,2] alpha;         // adjacency
-        }
-        transformed parameters {
-          array[M] vector[maxNa] lam_a;
-          array[M] vector[maxNb] lam_b;
+        hawkes_data = {
+        "Na": na_online,
+        "Nb": nb_offline,
+        "ta": np.array(online_padded_data),
+        "tb": np.array(offline_padded_data),
+        "maxNa": max(na_online),
+        "maxNb": max(nb_offline),
+        "M": self.M,
+        "T": self.T
+    }
 
-          // initialize first elements
-          for (m in 1:M) {
-            lam_a[m][1] = mu[m,1];
-            lam_b[m][1] = mu[m,2];
-          }
+        # Load Stan model from file (make sure hawkes_model.stan is present)
+        model = CmdStanModel(stan_file='hawkes_model.stan')
+        fit = model.sample(
+        data=hawkes_data,
+        chains=1,
+        iter_sampling=1000,
+        iter_warmup=500,
+        seed=2,
+        show_progress=True)
 
-          // lam online
-          for (m in 1:M) {
-            for (j in 1:Na[m]) {
-              lam_a[m][j] = mu[m,1];
-              for (k in 1:(j-1)) {
-                if (ta[m][j] > ta[m][k] && ta[m][j] != -1 && ta[m][k] != -1) {
-                  lam_a[m][j] += alpha[1,1] * gamma[1,1] * exp(-gamma[1,1] * (ta[m][j] - ta[m][k]));
-                }
-              }
-              for (k in 1:Nb[m]) {
-                if (ta[m][j] > tb[m][k] && ta[m][j] != -1 && tb[m][k] != -1) {
-                  lam_a[m][j] += alpha[1,2] * gamma[1,2] * exp(-gamma[1,2] * (ta[m][j] - tb[m][k]));
-                }
-              }
-            }
-
-            // lam offline
-            for (j in 1:Nb[m]) {
-              lam_b[m][j] = mu[m,2];
-              for (k in 1:(j-1)) {
-                if (tb[m][j] > tb[m][k] && tb[m][j] != -1 && tb[m][k] != -1) {
-                  lam_b[m][j] += alpha[2,2] * gamma[2,2] * exp(-gamma[2,2] * (tb[m][j] - tb[m][k]));
-                }
-              }
-              for (k in 1:Na[m]) {
-                if (tb[m][j] > ta[m][k] && tb[m][j] != -1 && ta[m][k] != -1) {
-                  lam_b[m][j] += alpha[2,1] * gamma[2,1] * exp(-gamma[2,1] * (tb[m][j] - ta[m][k]));
-                }
-              }
-            }
-          }
-        }
-
-        model {
-          // priors
-          alpha[1,1] ~ beta(1,1);
-          alpha[1,2] ~ beta(1,1);
-          alpha[2,1] ~ beta(1,1);
-          alpha[2,2] ~ beta(1,1);
-
-          for (m in 1:M) {
-            mu[m,1] ~ cauchy(0,5);
-            mu[m,2] ~ cauchy(0,5);
-          }
-          gamma[1,1] ~ cauchy(0,5);
-          gamma[2,1] ~ cauchy(0,5);
-          gamma[1,2] ~ cauchy(0,5);
-          gamma[2,2] ~ cauchy(0,5);
-
-          // likelihood maximization using the Shoenberg approximation
-          for (m in 1:M) {
-            for (j in 1:Na[m]) {
-              target += log(lam_a[m][j]);
-            }
-            for (j in 1:Nb[m]) {
-              target += log(lam_b[m][j]);
-            }
-            target += -mu[m,1] * T -mu[m,2] * T - (alpha[1,1] + alpha[2,1]) * Na[m] - (alpha[1,2] + alpha[2,2]) * Nb[m];
-          }
-        }
-        """
-
-        #it will take some time
-        hawkes_data = {"Na": na_online, "Nb":nb_offline, "ta":np.array(online_padded_data)
-                       , "tb": np.array(offline_padded_data), "maxNa" :max(na_online)
-                       , "maxNb": max(nb_offline), "M": self.M, "T": self.T}
-        posterior = stan.build(model_code, data = hawkes_data, random_seed=2)
-        fit = posterior.sample(num_chains=1, num_samples=1000)
-
-        #optinal saving for the fit file
+        fit_dict = {
+        'alpha': fit.stan_variable('alpha'),
+        'gamma': fit.stan_variable('gamma'),
+        'mu': fit.stan_variable('mu'),
+    }
         if save_fit:
             with open('fit.pkl', 'wb') as file:
-                pickle.dump(fit, file)
-        self.fit = fit
-        return fit
+                pickle.dump(fit_dict, file)
+        self.fit = fit_dict
+        return fit_dict
 
     def spillover_and_decays_values_and_CI(self, save_alpha = False, save_gamma = False):
         """
-    	This method constructs the tables of the O2O spillover as well as the O2O decay rate and their conrresponding 95% CI.
-    	In our convention, the marked 0 events correspond to online, and the marked 1 events correspond to offline.
+        This method constructs the tables of the O2O spillover as well as the O2O decay rate and their conrresponding 95% CI.
+        In our convention, the marked 0 events correspond to online, and the marked 1 events correspond to offline.
         - alpha_{00}: 0 --> 0 online to online spillover
         - alpha_{11}: 1 --> 1 offline to offline spillover
         - alpha_{01}: 1 --> 0 offline to online spillover
@@ -201,7 +132,7 @@ class ParameterEstimator:
         - gamma_{01}: 1 --> 0 offline to online decay rate
         - gamma_{10}: 0 --> 1 online to offline decay rate
 
-	Args:
+        Args:
             - save_alpha, save_beta: are declared when wanting to save the alpha and gamma tables as csv files
         Returns: 
             - pd.DataFrame of alpha and gamma and their 95% CI
