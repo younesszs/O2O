@@ -6,20 +6,20 @@ O2O is a Python package that quantifies mutual spillover between online and offl
 
 ## Installation
 
-- The package was developed and tested with Python 3.9.5. I highly recommend installing Python and the required dependencies in a virtual environment such as Conda. On Unix-based systems (Linux, macOS), Python is often tied to critical system functions, so modifying the system-wide Python installation can be risky. To install Conda:
+- I highly recommend installing Python and the required dependencies in a virtual environment such as Conda. On Unix-based systems (Linux, macOS), Python is often tied to critical system functions, so modifying the system-wide Python installation can be risky. To install Conda:
 
 - Visit the [Miniconda download page](https://docs.conda.io/en/latest/miniconda.html) and download the appropriate installer for your operating system.
 - Follow the installation instructions.
 - Once installed, create and activate a dedicated environment
 
 ```bash
-conda create -n o2o_env python=3.9
+conda create -n o2o_env python=3.11
 conda activate o2o_env
 ```
 - Once your environment is activated, install the required dependencies:
 
 ```bash
-pip install numpy pandas matplotlib pystan nest_asyncio
+pip install numpy pandas matplotlib cmdpystan nest_asyncio
 ```
 - Once you install all the dependencies, you can install the package using 
 
@@ -28,7 +28,7 @@ pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
-## Linux Note: Fix for Compiler and Stan Errors
+<!--## Linux Note: Fix for Compiler and Stan Errors
 If you use Linux you might encounter an error like 
 ```
 libstdc++.so.6: version `GLIBCXX_3.4.32' not found
@@ -50,7 +50,7 @@ Then set the compiler and clear Stan's cache
 export CXX=/usr/bin/g++-11
 rm -rf ~/.cache/httpstan
 ```
-
+-->
 ## Usage
 
 After installing the package, you can run its demo using the command:

@@ -17,6 +17,8 @@ try:
 except ImportError:
     pass
 
+pd.set_option('display.max_columns', None)
+
 class ParameterEstimator:
     """
     This class estimates the model parameters and outputs tables of the spillover estimation, decay rate estimation,
