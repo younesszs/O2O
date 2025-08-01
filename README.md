@@ -19,7 +19,7 @@ conda activate o2o_env
 - Once your environment is activated, install the required dependencies:
 
 ```bash
-pip install numpy pandas matplotlib cmdpystan nest_asyncio
+pip install numpy pandas matplotlib cmdstanpy nest_asyncio
 ```
 - Once you install all the dependencies, you can install the package using 
 
