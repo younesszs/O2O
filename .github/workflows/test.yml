@@ -33,6 +33,12 @@ jobs:
       - name: Install runtime dependencies
         run: |
          pip install pandas matplotlib pystan nest_asyncio pytest cmdstanpy
+         
+      - name: Cache CmdStan
+        uses: actions/cache@v3
+        with:
+          path: ~/.cmdstan
+          key: ${{ runner.os }}-cmdstan-${{ matrix.python }}
 
       - name: Install CmdStan binaries
         run: python -m cmdstanpy.install_cmdstan
