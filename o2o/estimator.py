@@ -208,8 +208,7 @@ class ParameterEstimator:
                 pd.DataFrame of mu and 95%CI for each user online and offline
         """
         fit = self.fit
-
-        M = len(fit['mu']) #Number of users
+        M = self.M
         labels = [f'User {i}' for i in range(1, M + 1)] #Generate labels as User1, User2...
 
         baseline = np.mean(fit['mu'], axis = 2)
