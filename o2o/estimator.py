@@ -243,8 +243,7 @@ class ParameterEstimator:
         """
 
         fit = self.fit
-        M = len(fit['mu']) #Number of users
-
+        M = self.M
         labels = [f'User {i}' for i in range(1, M + 1)] # generate labels
         baseline = np.mean(fit['mu'], axis = 2)
         adj = np.mean(fit['alpha'],2)
