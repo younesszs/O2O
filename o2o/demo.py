@@ -9,8 +9,11 @@ def main():
 
     # Simulate data
     sim = BivariateHawkesProcessSimulator(M, T)
-    data_online, data_offline = sim.simulate()
-
+   #This avoids empty data
+    while True:
+        data_online, data_offline = sim.simulate()
+        if all(len(o) > 0 for o in data_online) and all(len(f) > 0 for f in data_offline):
+            break
     # Fit model
     print('Data generated!! Fitting started... This may take sometime \n')
     estimator = ParameterEstimator(data_online, data_offline, M, T)
