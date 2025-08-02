@@ -17,7 +17,6 @@ try:
 except ImportError:
     pass
 
-pd.set_option('display.max_columns', None)
 
 class ParameterEstimator:
     """
