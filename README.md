@@ -21,6 +21,13 @@ conda activate o2o_env
 ```bash
 pip install numpy pandas matplotlib cmdstanpy nest_asyncio
 ```
+<!--CmdStanPy needs the CmdStan C++ backend to be installed. Run this command once to download and build it (This might take several minutes):
+
+```bash
+python -m cmdstanpy.install_cmdstan
+```
+-->
+
 - Once you install all the dependencies, you can install the package using 
 
 ```bash
