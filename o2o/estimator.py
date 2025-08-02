@@ -97,9 +97,11 @@ class ParameterEstimator:
         "M": self.M,
         "T": self.T
     }
+        #model = CmdStanModel(stan_file='hawkes_model.stan')
+        from importlib import resources 
+        with resources.path("o2o", "hawkes_model.stan") as stan_path:
+            model = CmdStanModel(stan_file=str(stan_path))
 
-        # Load Stan model from file (make sure hawkes_model.stan is present)
-        model = CmdStanModel(stan_file='hawkes_model.stan')
         fit = model.sample(
         data=hawkes_data,
         chains=1,

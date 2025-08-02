@@ -1,3 +1,4 @@
 include README.md
 include LICENSE
 recursive-include o2o *.pdf
+include o2o/hawkes_model.stan
