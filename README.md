@@ -19,14 +19,15 @@ conda activate o2o_env
 - Once your environment is activated, install the required dependencies:
 
 ```bash
-pip install numpy pandas matplotlib cmdstanpy nest_asyncio
+pip install numpy pandas matplotlib nest_asyncio
 ```
-<!--CmdStanPy needs the CmdStan C++ backend to be installed. Run this command once to download and build it (This might take several minutes):
+Then install CmdStan via conda. 
 
 ```bash
-python -m cmdstanpy.install_cmdstan
+conda install -c conda-forge cmdstan cmdstanpy
 ```
--->
+
+This is to avoid manual build issues and ensures CmdStan is precompiled and avoids needing `make` or compiler setup during install. 
 
 - Once you install all the dependencies, you can install the package using 
 
@@ -35,29 +36,6 @@ pip install o2o-process
 ```
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
-<!--## Linux Note: Fix for Compiler and Stan Errors
-If you use Linux you might encounter an error like 
-```
-libstdc++.so.6: version `GLIBCXX_3.4.32' not found
-```
-Or:
-```
-ValueError: TAPE_ERROR: The JSON document has an improper structure
-```
-This means that you need a newer version of the C++ compiler. To fix this, run the following:
-
-```bash
-sudo apt update
-sudo apt install g++-11
-```
-
-Then set the compiler and clear Stan's cache
-
-```bash
-export CXX=/usr/bin/g++-11
-rm -rf ~/.cache/httpstan
-```
--->
 ## Usage
 
 After installing the package, you can run its demo using the command:
