@@ -78,9 +78,9 @@ class O2OAnalyzer:
         data_online = self.data_online
         data_offline = self.data_offline
 
-        base_list = np.mean(fit['mu'], axis = 2) #baseline intensity list (for each user)
-        adj = np.mean(fit['alpha'],2) # the alpha matrix
-        decay = np.mean(fit['gamma'],2)    # the decay matrix
+        base_list = np.mean(fit['mu'], axis = 0) #baseline intensity list (for each user)
+        adj = np.mean(fit['alpha'], axis = 0) # the alpha matrix
+        decay = np.mean(fit['gamma'], axis = 0)    # the decay matrix
         labels = [f'User {i}' for i in range(1, M + 1)] #generate labels
 
         times1 = data_online
@@ -90,11 +90,12 @@ class O2OAnalyzer:
         intensity_on_list = []
         intensity_off_list = []
 
-        intensity_on = np.zeros(len(t))
-        intensity_off = np.zeros(len(t))
+       # intensity_on = np.zeros(len(t))
+       # intensity_off = np.zeros(len(t))
 
         #the conditional intensity for the online events
         for k in range(len(data_online)):
+            intensity_on = np.zeros(len(t))
             for i in range(len(t)):
                 intensity_on[i] = base_list[k][0]
                 for j in range(len(times1[k])):
@@ -107,11 +108,12 @@ class O2OAnalyzer:
                         if t[i] == times2[k][j]:
                             j+=1 #avoid vanishing time differences
                         intensity_on[i] += adj[0,1]*decay[0,1]*np.exp(-decay[0,1]*(t[i]-times2[k][j]))
-            intensity_on_list.append(intensity_on.copy())
+            intensity_on_list.append(intensity_on)
 
 
         #the conditional intensity for the offline events
         for k in range(len(data_offline)):
+            intensity_off = np.zeros(len(t))
             for i in range(len(t)):
                 intensity_off[i] = base_list[k][1]
                 for j in range(len(times2[k])):
@@ -124,14 +126,14 @@ class O2OAnalyzer:
                         if t[i] == times1[k][j]:
                             j+=1 #avoid vinishing time differences
                         intensity_off[i] += adj[1,0]*decay[1,0]*np.exp(-decay[1,0]*(t[i]-times1[k][j]))
-            intensity_off_list.append(intensity_off.copy())
+            intensity_off_list.append(intensity_off)
 
         #plotting
         for i in range(M):
             fig, ax = plt.subplots(figsize = (16,5))
             ax2 = plt.twinx()
-            ax.plot(t, intensity_on_list[i], color = 'r', label = 'Offline Activity') #offline intensity
-            ax2.plot(t, intensity_off_list[i], color = 'black',  label = 'Online Activity') #online intensity
+            ax.plot(t, intensity_on_list[i], color = 'r', label = 'Online Activity') #offline intensity
+            ax2.plot(t, intensity_off_list[i], color = 'black',  label = 'Offline Activity') #online intensity
             #ax.set_xlabel('Time', fontsize=30)
             ax.set_ylabel('Offline Intensity', fontsize=25)
             ax2.set_ylabel('Online Intensity', fontsize=25)

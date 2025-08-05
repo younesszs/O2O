@@ -58,7 +58,7 @@ class ParameterEstimator:
 
 
     #Define the first method in this class: The parameter estimation using Stan
-    def fit_model(self, data_online, data_offline, M, T, save_fit = False):
+    def fit_model(self, save_fit = False):
         """
         Estimate parameters using Stan.
 
@@ -79,12 +79,12 @@ class ParameterEstimator:
 
         #pad online data to feed it to Stan (Stan can't process ragged data)
         online_padded_data = []
-        for i in data_online:
+        for i in self.data_online:
             online_padded_data.append(np.pad(i, (0, max(na_online)- len(i)), constant_values = -1))
 
         #pad offline data to feed it to Stan (Stan can't process ragged data)
         offline_padded_data = []
-        for i in data_offline:
+        for i in self.data_offline:
             offline_padded_data.append(np.pad(i, (0, max(nb_offline)- len(i)), constant_values = -1))
 
         hawkes_data = {
@@ -143,35 +143,35 @@ class ParameterEstimator:
         fit = self.fit
 
         #Spillover
-        alpha_on_to_on =  '{:.3f}'.format(np.mean(fit['alpha'][0,0], axis=0))
-        alpha_off_to_off = '{:.3f}'.format(np.mean(fit['alpha'][1,1], axis=0))
-        alpha_on_to_off = '{:.3f}'.format(np.mean(fit['alpha'][1,0], axis=0))
-        alpha_off_to_on = '{:.3f}'.format(np.mean(fit['alpha'][0,1], axis=0))
+        alpha_on_to_on =  '{:.3f}'.format(np.mean(fit['alpha'][:, 0,0]))
+        alpha_off_to_off = '{:.3f}'.format(np.mean(fit['alpha'][:, 1,1]))
+        alpha_on_to_off = '{:.3f}'.format(np.mean(fit['alpha'][:, 1,0]))
+        alpha_off_to_on = '{:.3f}'.format(np.mean(fit['alpha'][:, 0,1]))
 
         #Decay rate
-        gamma_on_to_on =  '{:.3f}'.format(np.mean(fit['gamma'][0,0], axis=0))
-        gamma_off_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,1], axis=0))
-        gamma_on_to_off = '{:.3f}'.format(np.mean(fit['gamma'][1,0], axis=0))
-        gamma_off_to_on = '{:.3f}'.format(np.mean(fit['gamma'][0,1], axis=0))
+        gamma_on_to_on =  '{:.3f}'.format(np.mean(fit['gamma'][:, 0,0]))
+        gamma_off_to_off = '{:.3f}'.format(np.mean(fit['gamma'][:, 1,1]))
+        gamma_on_to_off = '{:.3f}'.format(np.mean(fit['gamma'][:, 1,0]))
+        gamma_off_to_on = '{:.3f}'.format(np.mean(fit['gamma'][:, 0,1]))
 
         #Spillover 95% CI
-        alpha_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['alpha'][0,0], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['alpha'][0,0], 95, axis=0))]
-        alpha_off_to_off_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][1,1], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['alpha'][1,1], 95, axis=0))]
-        alpha_on_to_off_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][1,0], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['alpha'][1,0], 95, axis=0))]
-        alpha_off_to_on_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][0,1], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['alpha'][0,1], 95, axis=0))]
+        alpha_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['alpha'][:, 0,0], 5))
+                , '{:.3f}'.format(np.percentile(fit['alpha'][:, 0,0], 95))]
+        alpha_off_to_off_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][:, 1,1], 5))
+                , '{:.3f}'.format(np.percentile(fit['alpha'][:, 1,1], 95))]
+        alpha_on_to_off_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][:, 1,0], 5))
+                , '{:.3f}'.format(np.percentile(fit['alpha'][:, 1,0], 95))]
+        alpha_off_to_on_CI =  ['{:.3f}'.format(np.percentile(fit['alpha'][:, 0,1], 5))
+                , '{:.3f}'.format(np.percentile(fit['alpha'][:, 0,1], 95))]
         #Decay rate 95% CI
-        gamma_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,0], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['gamma'][0,0], 95, axis=0))]
-        gamma_off_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,1], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['gamma'][1,1], 95, axis=0))]
-        gamma_on_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][1,0], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['gamma'][1,0], 95, axis=0))]
-        gamma_off_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][0,1], 5, axis=0))
-                             , '{:.3f}'.format(np.percentile(fit['gamma'][0,1], 95, axis=0))]
+        gamma_on_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][:, 0,0], 5))
+                , '{:.3f}'.format(np.percentile(fit['gamma'][:, 0,0], 95))]
+        gamma_off_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][:, 1,1], 5))
+                , '{:.3f}'.format(np.percentile(fit['gamma'][:, 1,1], 95))]
+        gamma_on_to_off_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][:, 1,0], 5))
+                , '{:.3f}'.format(np.percentile(fit['gamma'][:, 1,0], 95))]
+        gamma_off_to_on_CI = ['{:.3f}'.format(np.percentile(fit['gamma'][:, 0,1], 5))
+                , '{:.3f}'.format(np.percentile(fit['gamma'][:, 0,1], 95))]
         #Table of spillover effect and its 95% CI
         alpha_data = [
             ['Online to Online Spillover', alpha_on_to_on, alpha_on_to_on_CI],
@@ -211,7 +211,7 @@ class ParameterEstimator:
         M = self.M
         labels = [f'User {i}' for i in range(1, M + 1)] #Generate labels as User1, User2...
 
-        baseline = np.mean(fit['mu'], axis = 2)
+        baseline = np.mean(fit['mu'], axis = 0)
         def base(user, x):
             return '{:.3f}'.format(baseline[labels.index(user)][x])
         def base_CI(user, x):
@@ -244,8 +244,8 @@ class ParameterEstimator:
         fit = self.fit
         M = self.M
         labels = [f'User {i}' for i in range(1, M + 1)] # generate labels
-        baseline = np.mean(fit['mu'], axis = 2)
-        adj = np.mean(fit['alpha'],2)
+        baseline = np.mean(fit['mu'], axis = 0)
+        adj = np.mean(fit['alpha'], axis = 0)
 
         #Baseline intensity for each user
         def base(user, x):
