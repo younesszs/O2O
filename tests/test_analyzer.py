@@ -23,9 +23,9 @@ def sample_data():
 def sample_fit():
     # Mock fit: shapes should match Stan output conventions in your class
     return {
-        'mu': np.ones((5, 2, 100)),
-        'alpha': np.ones((2, 2, 100)),
-        'gamma': np.ones((2, 2, 100)),
+        'mu': np.ones((100, 5, 2)),
+        'alpha': np.ones((100, 2, 2)),
+        'gamma': np.ones((100, 2, 2)),
     }
 
 
