@@ -61,7 +61,7 @@ main
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/younesszs/O2O/blob/main/demo.ipynb)
 
-Note: Before running any cells in the notebook, make sure to install the required dependencies (shown above for Windows users) at the top of the notebook. Once setup is complete, continue with the demo as usual.
+Note: Make sure to uncomment and run the first cell before executing the rest of the notebook. It installs all required dependencies.
 
 
 
