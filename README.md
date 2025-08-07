@@ -72,6 +72,11 @@ Stan models require a C++ compiler and the `make` build tool, neither of which a
 import cmdstanpy
 cmdstanpy.install_cmdstan()
 ```
+- Install the package:
+```bash
+!pip install o2o-process
+```
+
 - Finally, you can run the O2O demo through
 
 ```bash
