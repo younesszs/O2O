@@ -40,7 +40,7 @@ pip install o2o-process
 - API documentation is provided in O2O_API_documentation.pdf in the docs directory.
 
 ### Note for Windows users
-Stan models require a C++ compiler and the `make` build tool — neither of which are included by default on Windows. Installing and configuring these tools (e.g., `g++`, `make`, and a Unix-like shell) can be complex and error-prone due to differences between Unix-based systems and Windows. In fact, Windows' built-in Command Prompt (cmd.exe) and PowerShell do not support Unix commands by default. But tools like `Stan`, `make`, and `cmdstanpy` often assume they’re running in a Unix-style shell. This is why I highly recomment for Windows users to Google Collab, a free, browser-based Python environment that runs on Linux and includes all necessary tools to compile and run Stan models out of the box. To do that follow the steps:
+Stan models require a C++ compiler and the `make` build tool, neither of which are included by default on Windows. Installing and configuring these tools (e.g., `g++`, `make`, and a Unix-like shell) can be complex and error-prone due to differences between Unix-based systems and Windows. In fact, Windows' built-in Command Prompt (cmd.exe) and PowerShell do not support Unix commands by default. But tools like `Stan`, `make`, and `cmdstanpy` often assume they’re running in a Unix-style shell. This is why I highly recomment for Windows users to use Google Collab, a free, browser-based Python environment that runs on Linux and includes all necessary tools to compile and run Stan models out of the box. To do that follow the steps:
 
 - Go to https://colab.research.google.com and open a new Python notebook
 - Open a new notebook and run
