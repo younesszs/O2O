@@ -140,7 +140,7 @@ Journal of quantitative criminology, 2025.
 I am always open to improving this software! 
 Feel free to open an issue, submit a pull request, or suggest enhancements.
 
-_If you find this project useful, feel free to star it to help others discover it._
+If you find this project useful, feel free to star it to help others discover it.
 
 Thanks for using O2O!
 
