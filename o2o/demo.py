@@ -16,7 +16,7 @@ def main():
     # Fit model
     print('Data generated!! Fitting started... This may take sometime \n')
     estimator = ParameterEstimator(data_online, data_offline, M, T)
-    fit = estimator.fit_model(data_online, data_offline, M, T)
+    fit = estimator.fit_model()
 
 
     #Print estimation results
