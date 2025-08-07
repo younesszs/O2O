@@ -81,7 +81,7 @@ cmdstanpy.install_cmdstan()
 
 ```bash
 from o2o.demo import main
-main
+main()
 ```
 - You can also use the included Jupyter Notebook  `demo.ipynb` directly in Colab:
 
