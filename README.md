@@ -51,7 +51,7 @@ where you will be prompted to specify:
 - The number of users
 - The time window of interest (in days)
 
-Note: To avoid generating empty synthetic data, use at least 5 users and a minimum of 20 days (T = 20). Smaller values may not yield meaningful or sufficient activity data.
+Note: To avoid generating empty synthetic data, use a minimum of 20 days (T = 20). Smaller values may not yield meaningful or sufficient activity data.
 
 You can also run the demo from a Jupyter Notebook (`demo.ipynb`). To access it, clone the GitHub repository:
 

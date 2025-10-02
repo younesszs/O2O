@@ -61,7 +61,7 @@ class O2OAnalyzer:
 
         return sizes
 
-    def plot_intensity(self, save_figs = False):
+    def plot_intensity(self, save_figs = False, ext  = None):
         """
         Plots the coupled conditional intensities (online and offline) over time for each user.
 
@@ -146,5 +146,7 @@ class O2OAnalyzer:
             plt.title(labels[i], fontsize=25)
             ax.set_xlabel('Time (in days)', fontsize = 25)
             if save_figs:
-                plt.savefig(f"{labels[i]}_intensity.eps")
-        plt.show()
+                if ext != None:
+                    plt.savefig(f"fig{i+1}.{ext}", bbox_inches="tight")
+            else:
+                plt.show()

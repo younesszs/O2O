@@ -214,10 +214,12 @@ class ParameterEstimator:
         baseline = np.mean(fit['mu'], axis = 0)
         def base(user, x):
             return '{:.3f}'.format(baseline[labels.index(user)][x])
+        #def base_CI(user, x):
+        #    return  ['{:.3f}'.format(np.percentile(fit['mu'][labels.index(user),x], 5))
+        #             , '{:.3f}'.format(np.percentile(fit['mu'][labels.index(user),x], 95))]
         def base_CI(user, x):
-            return  ['{:.3f}'.format(np.percentile(fit['mu'][labels.index(user),x], 5))
-                     , '{:.3f}'.format(np.percentile(fit['mu'][labels.index(user),x], 95))]
-
+    	    samples = fit['mu'][:, labels.index(user), x]  
+    	    return ['{:.3f}'.format(np.percentile(samples, 5)), '{:.3f}'.format(np.percentile(samples, 95))]
         table_base = {'User': labels,
 
             'Online baseline intensity' :[base(i, 0) for i in labels],
