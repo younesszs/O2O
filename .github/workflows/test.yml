@@ -41,8 +41,6 @@ jobs:
           key: ${{ runner.os }}-cmdstan-${{ matrix.python }}
 
       - name: Install CmdStan binaries
-        env:
-        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: python -m cmdstanpy.install_cmdstan
 
       # Install your package in editable mode so `import o2o` works
