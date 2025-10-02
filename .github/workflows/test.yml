@@ -41,7 +41,9 @@ jobs:
           key: ${{ runner.os }}-cmdstan-${{ matrix.python }}
 
       - name: Install CmdStan binaries
-        run: python -m cmdstanpy.install_cmdstan
+        run: >
+             python -c "import cmdstanpy; cmdstanpy.install_cmdstan(version='2.36.0')"
+        #run: python -m cmdstanpy.install_cmdstan
 
       # Install your package in editable mode so `import o2o` works
       - name: Install package itself
