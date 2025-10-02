@@ -64,7 +64,7 @@ def test_plot_intensity_runs_without_error(sample_data, sample_fit, tmp_path, mo
     analyzer = O2OAnalyzer(data_online, data_offline, M, T, sample_fit)
     monkeypatch.chdir(tmp_path)
     #Should not raise any error and should save EPS if save_fige = True
-    analyzer.plot_intensity(save_figs = True)
+    analyzer.plot_intensity(save_figs = True, ext = "eps")
     #list all the created EPS file, and check that the number of created EPS files = the number of users
     eps_files = [f for f in os.listdir('.') if f.endswith('.eps')]
     assert len(eps_files) == M
